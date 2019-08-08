@@ -21,11 +21,9 @@ github.com/ziyeziye/framework-gen
 --prefix Table prefix
 --package name to set for package
 
-go run main.go --connstr "root:pass@tcp(127.0.0.1:3306)/dbname?&parseTime=True" --package github.com/ziyeziye/framework --prefix pf_ --json --gorm --g
-uregu --rest
+go run main.go --connstr "root:pass@tcp(127.0.0.1:3306)/dbname?&parseTime=True" --package github.com/ziyeziye/framework --prefix pf_ --json --gorm --guregu --rest
 
-framework-gen --connstr "root:pass@tcp(127.0.0.1:3306)/dbname?&parseTime=True" --package github.com/ziyeziye/framework --prefix pf_ --json --gorm --g
-uregu --rest
+framework-gen --connstr "root:pass@tcp(127.0.0.1:3306)/dbname?&parseTime=True" --package github.com/ziyeziye/framework --prefix pf_ --json --gorm --guregu --rest
 ```
 #### Supported Datatypes
 
