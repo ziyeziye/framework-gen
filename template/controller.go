@@ -4,8 +4,8 @@ var ControllerTmpl = `package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/ziyeziye/framework/pkg/request"
-	"github.com/ziyeziye/framework/pkg/response"
+	"{{.Package}}/pkg/request"
+	"{{.Package}}/pkg/response"
 	"net/http"
 
 	"{{.PackageName}}"

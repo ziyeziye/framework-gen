@@ -138,7 +138,7 @@ func main() {
 		if *rest {
 			//write api
 			buf.Reset()
-			err = ct.Execute(&buf, map[string]string{"PackageName": *packageName + "/models", "StructName": structName})
+			err = ct.Execute(&buf, map[string]string{"Package":*packageName ,"PackageName": *packageName + "/models", "StructName": structName})
 			if err != nil {
 				fmt.Println("Error in rendering controller: " + err.Error())
 				return

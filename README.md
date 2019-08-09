@@ -24,7 +24,7 @@ github.com/ziyeziye/framework-gen
 
 go run main.go --connstr "root:pass@tcp(127.0.0.1:3306)/dbname?&parseTime=True" --prefix pf_ --package github.com/ziyeziye/framework --prefix pf_ --json --gorm --guregu --rest
 
-framework-gen --connstr "root:pass@tcp(127.0.0.1:3306)/dbname?&parseTime=True"--json --gorm --guregu --rest
+framework-gen --connstr "root:pass@tcp(127.0.0.1:3306)/dbname?&parseTime=True" --prefix pf_ --json --gorm --guregu --rest
 ```
 #### Supported Datatypes
 
