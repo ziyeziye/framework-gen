@@ -15,6 +15,7 @@ github.com/ziyeziye/framework-gen
 ## Usage
 
 ```BASH
+-v --version The version number of framework-gen is
 --connstr database connection string
 --database Database to for connection
 --table Table to build struct from
