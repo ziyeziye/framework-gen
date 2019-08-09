@@ -28,7 +28,7 @@ var (
 	sqlConnStr  = goopt.String([]string{"-c", "--connstr"}, "nil", "database connection string")
 	sqlDatabase = goopt.String([]string{"-d", "--database"}, "nil", "Database to for connection")
 	sqlTable    = goopt.String([]string{"-t", "--table"}, "", "Table to build struct from")
-	prefix    = goopt.String([]string{"-t", "--prefix"}, "", "Table prefix")
+	prefix      = goopt.String([]string{"--prefix"}, "", "Table prefix")
 
 	packageName = goopt.String([]string{"--package"}, "", "name to set for package")
 
@@ -38,7 +38,7 @@ var (
 
 	rest = goopt.Flag([]string{"--rest"}, []string{}, "Enable generating RESTful api", "")
 
-	verbose = goopt.Flag([]string{"-v", "--verbose"}, []string{}, "Enable verbose output", "")
+	version = goopt.Flag([]string{"-v", "--version"}, []string{}, "Enable version output", "")
 )
 
 func init() {
@@ -46,15 +46,18 @@ func init() {
 	goopt.Description = func() string {
 		return "ORM and RESTful API generator for Mysql"
 	}
-	goopt.Version = "0.1"
+	goopt.Version = "1.1"
 	goopt.Summary = `gen [-v] --connstr "user:password@/dbname" --package pkgName --database databaseName --table tableName [--json] [--gorm] [--guregu]`
-
 	//Parse options
 	goopt.Parse(nil)
-
 }
 
 func main() {
+	if *version==true {
+		fmt.Println("The version number of framework-gen is " + goopt.Version)
+		return
+	}
+
 	// Username is required
 	if sqlConnStr == nil || *sqlConnStr == "" {
 		fmt.Println("sql connection string is required! Add it with --connstr=s")
@@ -111,12 +114,14 @@ func main() {
 
 	// generate go files for each table
 	for _, tableName := range tables {
-		tableName := strings.Replace(tableName,*prefix,"",1)
+		tableName := strings.Replace(tableName, *prefix, "", 1)
 		structName := dbmeta.FmtFieldName(tableName)
 		structName = inflection.Singular(structName)
 		structNames = append(structNames, structName)
 
 		modelInfo := dbmeta.GenerateStruct(db, *prefix, tableName, structName, "models", *jsonAnnotation, *gormAnnotation, *gureguTypes)
+		//fmt.Println(modelInfo)
+		//utli.Exit(0)
 		var buf bytes.Buffer
 		err = t.Execute(&buf, modelInfo)
 		if err != nil {
