@@ -116,9 +116,7 @@ func main() {
 		structName = inflection.Singular(structName)
 		structNames = append(structNames, structName)
 
-		modelInfo := dbmeta.GenerateStruct(db, *prefix + tableName, structName, "models", *jsonAnnotation, *gormAnnotation, *gureguTypes)
-		//fmt.Println(modelInfo)
-		//utli.Exit(0)
+		modelInfo := dbmeta.GenerateStruct(db, *prefix, tableName, structName, "models", *jsonAnnotation, *gormAnnotation, *gureguTypes)
 		var buf bytes.Buffer
 		err = t.Execute(&buf, modelInfo)
 		if err != nil {
