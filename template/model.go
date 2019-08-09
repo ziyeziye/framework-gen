@@ -23,7 +23,7 @@ type {{.StructName}} struct {
 
 // TableName sets the insert table name for this struct type
 func ({{.ShortStructName}} *{{.StructName}}) TableName() string {
-	return "{{.TableName}}"
+	return tablePrefix + "{{.TableName}}"
 }
 
 func Get{{.StructName}}(id int) ({{.StructName | toLower}} {{.StructName}}, err error) {
