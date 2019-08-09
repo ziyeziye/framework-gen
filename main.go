@@ -89,7 +89,7 @@ func main() {
 	}
 	// if packageName is not set we need to default it
 	if packageName == nil || *packageName == "" {
-		*packageName = "generated"
+		*packageName = "framework"
 	}
 	os.Mkdir("models", 0777)
 

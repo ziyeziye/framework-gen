@@ -20,11 +20,11 @@ github.com/ziyeziye/framework-gen
 --database Database to for connection
 --table Table to build struct from
 --prefix Table prefix
---package name to set for package
+--package name to set for package,default:framework
 
-go run main.go --connstr "root:pass@tcp(127.0.0.1:3306)/dbname?&parseTime=True" --package github.com/ziyeziye/framework --prefix pf_ --json --gorm --guregu --rest
+go run main.go --connstr "root:pass@tcp(127.0.0.1:3306)/dbname?&parseTime=True" --prefix pf_ --package github.com/ziyeziye/framework --prefix pf_ --json --gorm --guregu --rest
 
-framework-gen --connstr "root:pass@tcp(127.0.0.1:3306)/dbname?&parseTime=True" --package github.com/ziyeziye/framework --prefix pf_ --json --gorm --guregu --rest
+framework-gen --connstr "root:pass@tcp(127.0.0.1:3306)/dbname?&parseTime=True"--json --gorm --guregu --rest
 ```
 #### Supported Datatypes
 
