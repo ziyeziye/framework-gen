@@ -4,9 +4,11 @@ var ModelTmpl = `package {{.PackageName}}
 
 import (
     "database/sql"
-    "time"
+	"github.com/jinzhu/gorm"
+	"github.com/openset/php2go/php"
+	"time"
 
-    "github.com/guregu/null"
+	"github.com/guregu/null"
 )
 
 var (
@@ -24,6 +26,20 @@ type {{.StructName}} struct {
 // TableName sets the insert table name for this struct type
 func ({{.ShortStructName}} *{{.StructName}}) TableName() string {
 	return tablePrefix + "{{.TableName}}"
+}
+
+func (*{{.StructName}}) BeforeCreate(scope *gorm.Scope) error {
+	createTime := php.Date("Y:m:d H:i:s")
+	scope.SetColumn("CreateTime", createTime)
+	scope.SetColumn("UpdateTime", createTime)
+
+	return nil
+}
+
+func (*{{.StructName}}) BeforeUpdate(scope *gorm.Scope) error {
+	scope.SetColumn("UpdateTime", php.Date("Y:m:d H:i:s"))
+
+	return nil
 }
 
 func Get{{.StructName}}(id int) ({{.StructName | toLower}} {{.StructName}}, err error) {
