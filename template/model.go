@@ -3,9 +3,8 @@ package template
 var ModelTmpl = `package {{.PackageName}}
 
 import (
-    "database/sql"
+	"database/sql"
 	"github.com/jinzhu/gorm"
-	"github.com/openset/php2go/php"
 	"time"
 
 	"github.com/guregu/null"
@@ -29,17 +28,23 @@ func ({{.ShortStructName}} *{{.StructName}}) TableName() string {
 }
 
 func (*{{.StructName}}) BeforeCreate(scope *gorm.Scope) error {
-	createTime := php.Date("Y:m:d H:i:s")
-	scope.SetColumn("CreateTime", createTime)
-	scope.SetColumn("UpdateTime", createTime)
-
+	scope.SetColumn("CreateTime", null.TimeFrom(time.Now().Local()))
+	scope.SetColumn("UpdateTime", null.TimeFrom(time.Now().Local()))
 	return nil
 }
 
 func (*{{.StructName}}) BeforeUpdate(scope *gorm.Scope) error {
-	scope.SetColumn("UpdateTime", php.Date("Y:m:d H:i:s"))
+	scope.SetColumn("UpdateTime", null.TimeFrom(time.Now().Local()))
 
 	return nil
+}
+
+func (s *{{.StructName}}) IsExit() bool {
+	db.Where(s).First(s)
+	if s.ID > 0 && s.State == 1 {
+		return true
+	}
+	return false
 }
 
 func Get{{.StructName}}(id int) ({{.StructName | toLower}} {{.StructName}}, err error) {
