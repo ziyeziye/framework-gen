@@ -39,14 +39,6 @@ func (*{{.StructName}}) BeforeUpdate(scope *gorm.Scope) error {
 	return nil
 }
 
-func (s *{{.StructName}}) IsExit() bool {
-	db.Where(s).First(s)
-	if s.ID > 0 && s.State == 1 {
-		return true
-	}
-	return false
-}
-
 func Get{{.StructName}}(id int) ({{.StructName | toLower}} {{.StructName}}, err error) {
 	err = db.First(&{{.StructName | toLower}}, id).Error
 	return {{.StructName | toLower}}, err
