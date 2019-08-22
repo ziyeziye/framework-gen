@@ -174,7 +174,6 @@ func sqlTypeToGoType(mysqlType string, nullable bool, gureguTypes bool) string {
 		}
 		return "string"
 	case "date", "datetime", "time", "timestamp":
-		return "string"
 		if nullable && gureguTypes {
 			return gureguNullTime
 		}

@@ -35,13 +35,6 @@ func (*{{.StructName}}) BeforeCreate(scope *gorm.Scope) error {
 
 func (*{{.StructName}}) BeforeUpdate(scope *gorm.Scope) error {
 	scope.SetColumn("UpdateTime", null.TimeFrom(time.Now().Local()))
-
-	return nil
-}
-
-func (c *{{.StructName}}) AfterFind(scope *gorm.Scope) error {
-	scope.SetColumn("CreateTime", c.CreateTime.ValueOrZero())
-	scope.SetColumn("UpdateTime", c.UpdateTime.ValueOrZero())
 	return nil
 }
 
