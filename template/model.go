@@ -39,18 +39,24 @@ func (*{{.StructName}}) BeforeUpdate(scope *gorm.Scope) error {
 	return nil
 }
 
+func (c *{{.StructName}}) AfterFind(scope *gorm.Scope) error {
+	scope.SetColumn("CreateTime", c.CreateTime.ValueOrZero())
+	scope.SetColumn("UpdateTime", c.UpdateTime.ValueOrZero())
+	return nil
+}
+
 func Get{{.StructName}}(id int) ({{.StructName | toLower}} {{.StructName}}, err error) {
 	err = db.First(&{{.StructName | toLower}}, id).Error
 	return {{.StructName | toLower}}, err
 }
 
-func Get{{pluralize .StructName}}(maps map[string]interface{}) ({{pluralize .StructName | toLower}} []{{.StructName}}) {
+func Get{{pluralize .StructName}}(maps map[string]interface{}) ({{pluralize .StructName | toLower}} []{{.StructName}}, err error) {
 	q, e := ModelSearch(maps)
 	if e!=nil {
 		return
 	}
 
-	q.Find(&{{pluralize .StructName | toLower}})
+	err = q.Find(&{{pluralize .StructName | toLower}}).Error
 	return
 }
 

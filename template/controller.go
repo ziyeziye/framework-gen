@@ -3,9 +3,9 @@ package template
 var ControllerTmpl = `package api
 
 import (
-	"github.com/gin-gonic/gin"
 	"{{.Package}}/pkg/request"
 	"{{.Package}}/pkg/response"
+	"github.com/gin-gonic/gin"
 	"net/http"
 
 	"{{.PackageName}}"
@@ -28,23 +28,29 @@ func GetAll{{pluralize .StructName}}(c *gin.Context) {
 	data["total"] = total
 
 	maps = request.GetPage(c, maps, false)
-	data["list"] = models.Get{{pluralize .StructName}}(maps)
 
-	response.Json(c, response.JsonType{Data: data})
+	respJson := response.Json()
+	if {{pluralize .StructName | toLower}}, err := models.Get{{pluralize .StructName}}(maps); err != nil {
+		respJson.SetState(false).SetMsg("error")
+	} else {
+		data["list"] = {{pluralize .StructName | toLower}}
+		respJson.SetData(data)
+	}
+
+	respJson.Return(c)
 }
 
 func Get{{.StructName}}(c *gin.Context) {
 	id := request.GetParam(c, "id", "")
 	{{.StructName | toLower}}, _ := models.Get{{.StructName}}(id.MustInt())
 
+	respJson := response.Json()
 	if {{.StructName | toLower}}.ID > 0 {
-		response.Json(c, response.JsonType{Data: {{.StructName | toLower}}})
+		respJson.SetData({{.StructName | toLower}})
 	} else {
-		response.Json(c, response.JsonType{
-			State: false,
-			Code:  http.StatusNotFound,
-		})
+		respJson.SetState(false).SetCode(http.StatusNotFound)
 	}
+	respJson.Return(c)
 }
 
 func Add{{.StructName}}(c *gin.Context) {
@@ -53,13 +59,13 @@ func Add{{.StructName}}(c *gin.Context) {
 	{{.StructName | toLower}} := models.{{.StructName}}{}
 	json := response.JsonType{}
 
+	respJson := response.Json()
 	if err := models.Add{{.StructName}}(&{{.StructName | toLower}}); err != nil {
-		json.Code = http.StatusInternalServerError
-		json.Msg = "新增失败"
-		json.State = false
-		json.Data = {{.StructName | toLower}}
+		respJson.Set(http.StatusInternalServerError, "新增失败", false, {{.StructName | toLower}})
+	} else {
+		respJson.SetData({{.StructName | toLower}})
 	}
-	response.Json(c, json)
+	respJson.Return(c)
 }
 
 func Update{{.StructName}}(c *gin.Context) {
@@ -68,29 +74,25 @@ func Update{{.StructName}}(c *gin.Context) {
 
 	{{.StructName | toLower}}, _ := models.Get{{.StructName}}(id.MustInt())
 
-	json := response.JsonType{}
+	respJson := response.Json()
 	if {{.StructName | toLower}}.ID > 0 {
 		if err := models.Update{{.StructName}}(&{{.StructName | toLower}}, maps); err != nil {
-			json.Code = http.StatusInternalServerError
-			json.Msg = "修改失败"
-			json.State = false
+			respJson.Set(http.StatusInternalServerError, "修改失败", false, {{.StructName | toLower}})
+		} else {
+			respJson.SetData({{.StructName | toLower}})
 		}
 	} else {
-		json.Code = http.StatusNotFound
-		json.State = false
+		respJson.SetState(false).SetCode(http.StatusNotFound)
 	}
-
-	response.Json(c, json)
+	respJson.Return(c)
 }
 
 func Delete{{.StructName}}(c *gin.Context) {
 	id := request.GetParam(c, "id", "")
-	json := response.JsonType{}
+	respJson := response.Json()
 	if err := models.Delete{{.StructName}}(id.MustInt()); err != nil {
-		json.Code = http.StatusInternalServerError
-		json.Msg = "删除失败"
-		json.State = false
+		respJson.Set(http.StatusInternalServerError, "删除失败", false, nil)
 	}
-	response.Json(c, json)
+	respJson.Return(c)
 }
 `
