@@ -57,7 +57,6 @@ func Add{{.StructName}}(c *gin.Context) {
 	//maps := make(map[string]interface{})
 
 	{{.StructName | toLower}} := models.{{.StructName}}{}
-	json := response.JsonType{}
 
 	respJson := response.Json()
 	if err := models.Add{{.StructName}}(&{{.StructName | toLower}}); err != nil {
